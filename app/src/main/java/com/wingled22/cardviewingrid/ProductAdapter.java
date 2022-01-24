@@ -19,9 +19,11 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
 
     //create a constructor
     private ArrayList<Product> productArrayList;
+    private OnItemListener onItemListener;
 
-    public ProductAdapter(ArrayList<Product> products){
+    public ProductAdapter(ArrayList<Product> products, OnItemListener onItemListener){
         this.productArrayList = products;
+        this.onItemListener = onItemListener;
     }
 
 
@@ -33,7 +35,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
 
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.product_card, parent, false);
 
-        return new ViewHolder(view);
+        return new ViewHolder(view,onItemListener);
     }
 
     //this will populate the cell
@@ -51,20 +53,30 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
 
 
     //2: create a view holder
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         private TextView prodName;
         private TextView prodDesc;
+        private OnItemListener onItemListener;
 
-        public ViewHolder(@NonNull View itemView) {
+        public ViewHolder(@NonNull View itemView, OnItemListener onItemListener) {
             super(itemView);
 
             prodName = (TextView) itemView.findViewById(R.id.prodName);
             prodDesc = (TextView) itemView.findViewById(R.id.prodDesc);
+            this.onItemListener = onItemListener;
+            itemView.setOnClickListener(this);
         }
 
 
+        @Override
+        public void onClick(View v) {
+            onItemListener.onItemClick(getAdapterPosition());
+        }
     }
 
+    public interface OnItemListener{
+        void onItemClick(int position);
+    }
 
 }

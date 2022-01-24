@@ -1,5 +1,6 @@
 package com.wingled22.cardviewingrid;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
@@ -7,11 +8,11 @@ import android.support.v7.widget.RecyclerView;
 
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements ProductAdapter.OnItemListener {
 
     RecyclerView recyclerView;
 
-    ArrayList<Product> productArrayList = new ArrayList<Product>();
+    public static ArrayList<Product> productArrayList = new ArrayList<Product>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,7 +25,7 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-        ProductAdapter adapter  = new ProductAdapter(productArrayList);
+        ProductAdapter adapter  = new ProductAdapter(productArrayList, this);
 
         RecyclerView.LayoutManager layoutManager = new GridLayoutManager(getApplicationContext(),3);
         recyclerView.setLayoutManager(layoutManager);
@@ -50,4 +51,10 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    public void onItemClick(int position) {
+        Intent detailIntent = new Intent(this, ProductDetailActivity.class);
+        detailIntent.putExtra("position", position);
+        startActivity(detailIntent);
+    }
 }
